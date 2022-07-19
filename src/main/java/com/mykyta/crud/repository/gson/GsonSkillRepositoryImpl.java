@@ -55,9 +55,12 @@ public class GsonSkillRepositoryImpl implements SkillRepository {
     @Override
     public Skill update(Skill skill) {
         List<Skill> skillList = getAll();
+        if(skillList.stream().noneMatch(skill1 -> skill1.getId().equals(skill.getId())))
+            return null;
         skillList.stream()
                 .filter(skill1 -> skill1.getId().equals(skill.getId()))
                 .forEach(skill1 -> skill1.setSkillName(skill.getSkillName()));
+        createNewSkillsJson(skillList);
         return skill;
     }
 
