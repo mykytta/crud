@@ -21,8 +21,8 @@ public class SkillController {
         return skillRepository.getById(id);
     }
 
-    public Skill createSkill(Integer id, String skillName){
-        Skill skill = new Skill(id, skillName);
+    public Skill createSkill(String skillName){
+        Skill skill = new Skill(null, skillName);
         return skillRepository.create(skill);
     }
 

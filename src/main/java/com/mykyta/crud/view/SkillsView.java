@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SkillsView {
-    Scanner scanner = new Scanner(System.in);
-    SkillController skillController = new SkillController();
+    private final Scanner scanner = new Scanner(System.in);
+    private final SkillController skillController = new SkillController();
 
     public void getAllSkills(){
         System.out.println("Skills: ");
@@ -30,11 +30,9 @@ public class SkillsView {
     }
 
     public void createSkill(){
-        System.out.println("Input ID of your skill: ");
-        Integer id = Integer.valueOf(scanner.nextLine());
         System.out.println("Input name of your skill: ");
         String skillName = scanner.nextLine();
-        Skill skill = skillController.createSkill(id, skillName);
+        Skill skill = skillController.createSkill(skillName);
         System.out.println("Skill " + skill.getSkillName() + " successfully created");
     }
 

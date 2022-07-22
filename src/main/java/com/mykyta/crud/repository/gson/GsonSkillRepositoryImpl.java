@@ -10,18 +10,19 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class GsonSkillRepositoryImpl implements SkillRepository {
 
-    private final Path skillsRep = Path.of("src/main/resources/skills.json");
+    private final Path SKILLS_FILE_PATH = Path.of("src/main/resources/skills.json");
 
-    @Override
-    public List<Skill> getAll() {
+    private List<Skill> getAllSkills() {
         String json;
         try {
-            json = Files.readString(skillsRep);
+            json = Files.readString(SKILLS_FILE_PATH);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -31,8 +32,13 @@ public class GsonSkillRepositoryImpl implements SkillRepository {
     }
 
     @Override
+    public List<Skill> getAll() {
+        return getAllSkills();
+    }
+
+    @Override
     public Skill getById(Integer id) {
-        return getAll().stream()
+        return getAllSkills().stream()
                 .filter(skill -> skill.getId().equals(id))
                 .findFirst()
                 .orElse(null);
@@ -40,43 +46,43 @@ public class GsonSkillRepositoryImpl implements SkillRepository {
 
     @Override
     public Skill create(Skill skill) {
-        List<Skill> skillList = getAll();
-        if (skillList != null) {
-            skillList.add(skill);
-        } else {
-            skillList = new ArrayList<>();
-            skillList.add(skill);
-        }
-
+        List<Skill> skillList = getAllSkills();
+        skill.setId(generateNewId(skillList));
+        skillList.add(skill);
         createNewSkillsJson(skillList);
         return skill;
     }
 
     @Override
     public Skill update(Skill skill) {
-        List<Skill> skillList = getAll();
-        if(skillList.stream().noneMatch(skill1 -> skill1.getId().equals(skill.getId())))
-            return null;
-        skillList.stream()
-                .filter(skill1 -> skill1.getId().equals(skill.getId()))
-                .forEach(skill1 -> skill1.setSkillName(skill.getSkillName()));
+        List<Skill> skillList = getAllSkills();
+        skillList.forEach(s -> {
+            if(s.getId().equals(skill.getId())) {
+                s.setSkillName(skill.getSkillName());
+            }
+        });
         createNewSkillsJson(skillList);
         return skill;
     }
 
     @Override
     public void deleteById(Integer id) {
-        List<Skill> skillList = getAll().stream()
-                .filter(skill -> !skill.getId().equals(id))
-                .collect(Collectors.toList());
+        List<Skill> skillList = getAllSkills();
+        skillList.removeIf(s -> s.getId().equals(id));
         createNewSkillsJson(skillList);
     }
 
-    public void createNewSkillsJson(List<Skill> skillList) {
+
+    private void createNewSkillsJson(List<Skill> skillList) {
         try {
-            Files.writeString(skillsRep, new Gson().toJson(skillList));
+            Files.writeString(SKILLS_FILE_PATH, new Gson().toJson(skillList));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Integer generateNewId(List<Skill> skills) {
+        Skill skillWithMaxId = skills.stream().max(Comparator.comparing(Skill::getId)).orElse(null);
+        return Objects.nonNull(skillWithMaxId) ? skillWithMaxId.getId() + 1 : 1;
     }
 }
