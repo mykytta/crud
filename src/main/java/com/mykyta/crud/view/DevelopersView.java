@@ -91,9 +91,9 @@ public class DevelopersView {
     public void updateDeveloper(){
         System.out.println("Please, enter ID of developer which you want to update");
         Integer id = Integer.valueOf(scanner.nextLine());
-        System.out.println("Input first name of skill which you want to update: ");
+        System.out.println("Input first name of developer which you want to update: ");
         String firstName = scanner.nextLine();
-        System.out.println("Input last name of skill which you want to update: ");
+        System.out.println("Input last name of developer which you want to update: ");
         String lastName = scanner.nextLine();
         System.out.println("Input id of skill which you want to add");
         List<Skill> skillList = showSkillList();

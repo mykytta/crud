@@ -62,6 +62,7 @@ public class GsonDeveloperRepositoryImpl implements DeveloperRepository {
                 s.setLastName(developer.getLastName());
                 s.setSkills(developer.getSkills());
                 s.setSpecialty(developer.getSpecialty());
+                s.setStatus(Status.ACTIVE);
             }
         });
         createNewDevelopersJson(developerList);
