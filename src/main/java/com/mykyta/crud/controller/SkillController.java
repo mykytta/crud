@@ -7,7 +7,7 @@ import com.mykyta.crud.repository.gson.GsonSkillRepositoryImpl;
 import java.util.List;
 
 public class SkillController {
-    SkillRepository skillRepository;
+    private final SkillRepository skillRepository;
 
     public SkillController(){
         skillRepository = new GsonSkillRepositoryImpl();

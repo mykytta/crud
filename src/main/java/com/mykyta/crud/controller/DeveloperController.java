@@ -9,7 +9,7 @@ import com.mykyta.crud.repository.gson.GsonDeveloperRepositoryImpl;
 import java.util.List;
 
 public class DeveloperController {
-    DeveloperRepository developerRepository;
+    private final DeveloperRepository developerRepository;
 
     public DeveloperController(){
         developerRepository = new GsonDeveloperRepositoryImpl();

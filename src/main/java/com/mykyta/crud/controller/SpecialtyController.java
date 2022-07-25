@@ -7,7 +7,7 @@ import com.mykyta.crud.repository.gson.GsonSpecialtyRepositoryImpl;
 import java.util.List;
 
 public class SpecialtyController {
-    SpecialtyRepository specialtyRepository;
+    private final SpecialtyRepository specialtyRepository;
 
     public SpecialtyController(){
         specialtyRepository = new GsonSpecialtyRepositoryImpl();
